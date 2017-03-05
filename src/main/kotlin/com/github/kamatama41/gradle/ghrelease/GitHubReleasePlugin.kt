@@ -16,7 +16,9 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.api.tasks.bundling.Jar
 
 class GitHubReleasePlugin : Plugin<Project> {
-    val extensionName = "ghrelease"
+    companion object {
+        val extensionName = "ghrelease"
+    }
 
     override fun apply(project: Project) {
         project.extensions.create(extensionName, GitHubReleaseExtension::class.java, project)
