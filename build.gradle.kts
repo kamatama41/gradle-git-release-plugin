@@ -2,11 +2,13 @@ import com.github.kamatama41.gradle.gitrelease.GitReleaseExtension
 
 buildscript {
     val kotlinVersion = "1.1.0"
+    val localRepoDir = "${System.getProperty("user.home")}/gh-maven-repository"
     extra["kotlinVersion"] = kotlinVersion
+    extra["localRepoDir"] = localRepoDir
     repositories {
         jcenter()
         maven { setUrl("http://kamatama41.github.com/maven-repository/repository") }
-        maven { setUrl("./build/ghrelease/repository") }
+        maven { setUrl("$localRepoDir/repository") }
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
@@ -38,7 +40,9 @@ dependencies {
     testCompile("junit:junit:4.12")
 }
 
+val localRepoDir: String by extra
 configure<GitReleaseExtension> {
     groupId = "com.github.kamatama41"
     repoUri = "git@github.com:kamatama41/maven-repository.git"
+    repoDir = file(localRepoDir)
 }
