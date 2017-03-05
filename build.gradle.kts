@@ -1,4 +1,4 @@
-import com.github.kamatama41.gradle.ghrelease.GitHubReleaseExtension
+import com.github.kamatama41.gradle.gitrelease.GitReleaseExtension
 
 buildscript {
     val kotlinVersion = "1.1.0"
@@ -10,14 +10,14 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("com.github.kamatama41:gradle-ghrelease-plugin:0.1.0-RC2")
+        classpath("com.github.kamatama41:gradle-git-release-plugin:0.1.0-RC2")
     }
 }
 
 apply {
     plugin("idea")
     plugin("kotlin")
-    plugin("com.github.kamatama41.ghrelease")
+    plugin("com.github.kamatama41.git-release")
 }
 
 repositories {
@@ -38,7 +38,7 @@ dependencies {
     testCompile("junit:junit:4.12")
 }
 
-configure<GitHubReleaseExtension> {
+configure<GitReleaseExtension> {
     groupId = "com.github.kamatama41"
     repoUri = "git@github.com:kamatama41/maven-repository.git"
 }

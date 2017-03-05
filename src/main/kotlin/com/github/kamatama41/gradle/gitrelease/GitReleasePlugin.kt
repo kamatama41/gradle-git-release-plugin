@@ -1,4 +1,4 @@
-package com.github.kamatama41.gradle.ghrelease
+package com.github.kamatama41.gradle.gitrelease
 
 import net.researchgate.release.GitAdapter
 import net.researchgate.release.ReleaseExtension
@@ -15,13 +15,13 @@ import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 import org.gradle.api.tasks.bundling.Jar
 
-class GitHubReleasePlugin : Plugin<Project> {
+class GitReleasePlugin : Plugin<Project> {
     companion object {
-        val extensionName = "ghrelease"
+        val extensionName = "gitRelease"
     }
 
     override fun apply(project: Project) {
-        project.extensions.create(extensionName, GitHubReleaseExtension::class.java, project)
+        project.extensions.create(extensionName, GitReleaseExtension::class.java, project)
 
         project.plugins.apply(JavaPlugin::class.java)
         project.plugins.apply(MavenPublishPlugin::class.java)
@@ -34,7 +34,7 @@ class GitHubReleasePlugin : Plugin<Project> {
     }
 
     fun configure(project: Project) {
-        val extension = project.extensions.findByName(extensionName) as GitHubReleaseExtension
+        val extension = project.extensions.findByName(extensionName) as GitReleaseExtension
 
         ///////////////////////////////////////////////
         // Task configurations
@@ -61,7 +61,7 @@ class GitHubReleasePlugin : Plugin<Project> {
         // Extension configurations
         ///////////////////////////////////////////////
 
-        // GitHub publish
+        // Git publish
         project.extensions.configure(GitPublishExtension::class.java) { gitPublish ->
             gitPublish.repoUri = extension.repoUri
             gitPublish.branch = extension.repoBranch

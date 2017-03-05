@@ -1,4 +1,4 @@
-package com.github.kamatama41.gradle.ghrelease
+package com.github.kamatama41.gradle.gitrelease
 
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.tasks.bundling.Jar
@@ -8,7 +8,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
-class GitHubReleasePluginTest {
+class GitReleasePluginTest {
     @Rule @JvmField
     val testProjectDir = TemporaryFolder()
 
@@ -16,9 +16,9 @@ class GitHubReleasePluginTest {
         val projectDir = testProjectDir.root
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build() as ProjectInternal
 
-        project.pluginManager.apply("com.github.kamatama41.ghrelease")
+        project.pluginManager.apply("com.github.kamatama41.git-release")
 
-        val extension = project.extensions.findByName(GitHubReleasePlugin.extensionName) as GitHubReleaseExtension
+        val extension = project.extensions.findByName(GitReleasePlugin.extensionName) as GitReleaseExtension
         extension.groupId = "com.example"
         extension.repoUri = "git@github.com:testUser/testRepo.git"
 

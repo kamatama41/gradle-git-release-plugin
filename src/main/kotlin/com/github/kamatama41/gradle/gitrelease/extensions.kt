@@ -1,4 +1,4 @@
-package com.github.kamatama41.gradle.ghrelease
+package com.github.kamatama41.gradle.gitrelease
 
 import org.gradle.api.Project
 
