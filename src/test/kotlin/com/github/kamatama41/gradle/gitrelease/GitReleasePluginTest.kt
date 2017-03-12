@@ -1,34 +1,74 @@
 package com.github.kamatama41.gradle.gitrelease
 
-import org.gradle.api.internal.project.ProjectInternal
-import org.gradle.api.tasks.bundling.Jar
-import org.gradle.testfixtures.ProjectBuilder
+import org.eclipse.jgit.internal.storage.file.FileRepository
+import org.eclipse.jgit.junit.RepositoryTestCase
+import org.eclipse.jgit.transport.RemoteConfig
+import org.eclipse.jgit.transport.URIish
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertTrue
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import java.io.File
 
-class GitReleasePluginTest {
-    @Rule @JvmField
-    val testProjectDir = TemporaryFolder()
+class GitReleasePluginTest : RepositoryTestCase() {
+    lateinit var testProjectDir: FileRepository
+    lateinit var mavenRepo: RemoteConfig
+    val projectDir by lazy { testProjectDir.directory!! }
+    val buildDir by lazy { "${projectDir.absolutePath}/build/git-release-test" }
 
-    val project: ProjectInternal by lazy {
-        val projectDir = testProjectDir.root
-        val project = ProjectBuilder.builder().withProjectDir(projectDir).build() as ProjectInternal
-
-        project.pluginManager.apply("com.github.kamatama41.git-release")
-
-        val extension = project.extensions.findByName(GitReleasePlugin.extensionName) as GitReleaseExtension
-        extension.groupId = "com.example"
-        extension.repoUri = "git@github.com:testUser/testRepo.git"
-
-        project
+    override fun setUp() {
+        super.setUp()
+        setupRemote()
+        setupProject()
     }
+
+    // TODO: test 'release' task
 
     @Test
-    fun sourceJar() {
-        project.evaluate()
-        val sourceJar = project.tasks.findByName("sourceJar")
-        assertTrue("sourceJar is a Jar task", sourceJar is Jar)
+    fun testPublish() {
+        val result = build("publish").task(":publish")
+        assertThat(result.outcome, `is`(TaskOutcome.SUCCESS))
+        assertTrue(File("$buildDir/test-repository/com/example/awesome-artifact/0.1.0-SNAPSHOT").exists())
     }
+
+    private fun setupProject() {
+        val repo = createWorkRepository()
+        testProjectDir = repo
+
+        createFile("build.gradle").writeText("""
+            plugins { id 'com.github.kamatama41.git-release' }
+
+            gitRelease {
+                groupId = 'com.example'
+                artifactId = 'awesome-artifact'
+                repoUri = '${mavenRepo.urIs[0]}'
+                repoDir = file('$buildDir')
+                repoPath = 'test-repository'
+            }
+        """)
+        createFile("gradle.properties").writeText("version=0.1.0-SNAPSHOT")
+    }
+
+    private fun setupRemote() {
+        val repo = createBareRepository()
+        val config = repo.config
+        val remoteConfig = RemoteConfig(config, "test")
+        val uri = URIish(repo.directory.toURI().toURL())
+        remoteConfig.addURI(uri)
+        remoteConfig.update(config)
+        config.save()
+        mavenRepo = remoteConfig
+    }
+
+    private fun build(vararg args: String): BuildResult = newRunner(*args, "--stacktrace").build()
+
+    private fun newRunner(vararg args: String): GradleRunner = GradleRunner.create()
+            .withProjectDir(projectDir)
+            .withArguments(*args)
+            .withPluginClasspath()
+
+    private fun createFile(name: String) = File(projectDir, name)
 }
