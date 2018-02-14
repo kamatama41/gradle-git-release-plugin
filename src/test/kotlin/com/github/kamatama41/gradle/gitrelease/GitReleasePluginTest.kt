@@ -29,7 +29,7 @@ class GitReleasePluginTest : RepositoryTestCase() {
 
     @Test
     fun testPublish() {
-        val result = build("publish").task(":publish")
+        val result = build("publish").task(":publish")!!
         assertThat(result.outcome, `is`(TaskOutcome.SUCCESS))
         assertTrue(File("$buildDir/test-repository/com/example/awesome-artifact/0.1.0-SNAPSHOT").exists())
     }

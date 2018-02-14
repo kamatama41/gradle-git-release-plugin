@@ -41,14 +41,14 @@ class GitReleasePlugin : Plugin<Project> {
         ///////////////////////////////////////////////
 
         // maven-publish
-        val publish = project.tasks.findByName("publish")
+        val publish = project.tasks.findByName("publish")!!
         // git-publish
-        val gitPublishReset = project.tasks.findByName("gitPublishReset")
-        val gitPublishCopy = project.tasks.findByName("gitPublishCopy")
-        val gitPublishCommit = project.tasks.findByName("gitPublishCommit")
-        val gitPublishPush = project.tasks.findByName("gitPublishPush")
+        val gitPublishReset = project.tasks.findByName("gitPublishReset")!!
+        val gitPublishCopy = project.tasks.findByName("gitPublishCopy")!!
+        val gitPublishCommit = project.tasks.findByName("gitPublishCommit")!!
+        val gitPublishPush = project.tasks.findByName("gitPublishPush")!!
         // release
-        val afterReleaseBuild = project.tasks.findByName("afterReleaseBuild")
+        val afterReleaseBuild = project.tasks.findByName("afterReleaseBuild")!!
 
         publish.dependsOn(gitPublishReset)
         gitPublishCopy.enabled = false
@@ -108,7 +108,7 @@ class GitReleasePlugin : Plugin<Project> {
         return project.tasks.create("sourceJar", Jar::class.java) { task ->
             task.group = "build"
 
-            val main = sourceSets.findByName("main")
+            val main = sourceSets.findByName("main")!!
             task.from(main.allSource)
             task.classifier = "sources"
         }
