@@ -9,6 +9,8 @@ buildscript {
 }
 
 plugins {
+    id "com.gradle.plugin-publish" version "0.10.1"
+    id "java-gradle-plugin"
     id "org.jetbrains.kotlin.jvm" version "1.3.21"
 }
 apply plugin: "idea"
@@ -22,6 +24,8 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+group = "com.github.kamatama41"
 
 configurations {
     [compileClasspath, testCompileClasspath].each {
@@ -39,11 +43,33 @@ dependencies {
 }
 
 gitRelease {
-    groupId = "com.github.kamatama41"
+    groupId = group
     repoUri = "git@github.com:kamatama41/maven-repository.git"
     repoDir = file("${System.getProperty("user.home")}/gh-maven-repository")
 }
 
 gradlePlugin {
     automatedPublishing = false
+
+    plugins {
+        gitReleasePlugin {
+            id = "${group}.git-release"
+            implementationClass = "com.github.kamatama41.gradle.gitrelease.GitReleasePlugin"
+        }
+    }
 }
+
+pluginBundle {
+    website = "https://github.com/kamatama41/gradle-git-release-plugin"
+    vcsUrl = "https://github.com/kamatama41/gradle-git-release-plugin"
+    description = "A Gradle plugin that can release a Maven artifact into a Git repository, which is generally expected to be a GitHub Pages."
+    tags = ["git", "maven"]
+
+    plugins {
+        gitReleasePlugin {
+            displayName = "Gradle Git release plugin"
+        }
+    }
+}
+
+afterReleaseBuild.dependsOn publishPlugins
