@@ -17,7 +17,7 @@ import org.gradle.api.tasks.bundling.Jar
 
 class GitReleasePlugin : Plugin<Project> {
     companion object {
-        val extensionName = "gitRelease"
+        const val extensionName = "gitRelease"
     }
 
     override fun apply(project: Project) {
@@ -115,7 +115,7 @@ class GitReleasePlugin : Plugin<Project> {
 
             val main = sourceSets.findByName("main")!!
             task.from(main.allSource)
-            task.classifier = "sources"
+            task.archiveClassifier.set("sources")
         }
     }
 }
