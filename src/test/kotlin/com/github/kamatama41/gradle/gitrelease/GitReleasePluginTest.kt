@@ -16,7 +16,7 @@ import java.io.File
 class GitReleasePluginTest : RepositoryTestCase() {
     lateinit var testProjectDir: FileRepository
     lateinit var mavenRepo: RemoteConfig
-    val projectDir by lazy { testProjectDir.directory!! }
+    val projectDir by lazy { testProjectDir.directory!!.parentFile }  // "testProjectDir.directory!!" is the path of ".git"
     val buildDir by lazy { "${projectDir.absolutePath}/build/git-release-test" }
 
     override fun setUp() {

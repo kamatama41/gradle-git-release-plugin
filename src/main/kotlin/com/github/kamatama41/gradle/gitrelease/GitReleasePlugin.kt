@@ -115,7 +115,7 @@ class GitReleasePlugin : Plugin<Project> {
 
             val main = sourceSets.findByName("main")!!
             task.from(main.allSource)
-            task.classifier = "sources"
+            task.archiveClassifier.set("sources")
         }
     }
 }
