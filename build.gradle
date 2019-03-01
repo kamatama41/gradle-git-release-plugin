@@ -23,14 +23,19 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations {
+    [compileClasspath, testCompileClasspath].each {
+        it.resolutionStrategy.activateDependencyLocking()
+    }
+}
 dependencies {
-    compile gradleApi()
+    implementation gradleApi()
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    compile "org.ajoberstar:gradle-git-publish:0.3.2"
-    compile "net.researchgate:gradle-release:2.6.0"
-    testCompile gradleTestKit()
-    testCompile "junit:junit:4.12"
-    testCompile "org.eclipse.jgit:org.eclipse.jgit.junit:4.10.0.201712302008-r"
+    implementation "org.ajoberstar:gradle-git-publish:0.3.2"
+    implementation "net.researchgate:gradle-release:2.6.0"
+    testImplementation gradleTestKit()
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.eclipse.jgit:org.eclipse.jgit.junit:4.10.0.201712302008-r"
 }
 
 gitRelease {
