@@ -4,11 +4,21 @@
 # gradle-plugin-git-release
 A Gradle plugin that can release a Maven artifact into a Git repository, which is generally expected to be a [GitHub Pages](https://pages.github.com/).
 
-## Requirement
-- Gradle 3.0 ~ 4.2
+https://plugins.gradle.org/plugin/com.github.kamatama41.git-release
+
+## Supported Gradle version
+It's tested on Gradle 5.2.1. It might not work on other version.
 
 ## Installation
 
+Using plugins DSL:
+```gradle
+plugins {
+  id "com.github.kamatama41.git-release" version "<version>"
+}
+```
+
+Using legacy plugin application:
 ```gradle
 buildscript {
     repositories {
