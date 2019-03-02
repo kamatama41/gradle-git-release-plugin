@@ -30,6 +30,8 @@ jobs:
           name: Release to kamatama41/maven-repository
           command: |
             if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              echo "gradle.publish.key={GRADLE_PUBLISH_KEY}" >> ~/.gradle/gradle.properties
+              echo "gradle.publish.secret=${GRADLE_PUBLISH_SECRET}" >> ~/.gradle/gradle.properties
               git config --global user.email "shiketaudonko41@gmail.com"
               git config --global user.name "kamatama41"
               git checkout master
