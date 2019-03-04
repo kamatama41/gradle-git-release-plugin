@@ -9,7 +9,7 @@ jobs:
           keys:
             - v1-gradle-{{ checksum "gradle/dependency-locks/compileClasspath.lockfile" }}-{{ checksum "gradle/dependency-locks/testCompileClasspath.lockfile" }}
             - v1-gradle-
-      - run: ./gradlew check --info
+      - run: ./gradlew check --info --scan
       - run:
           name: Save test results
           command: |
@@ -36,5 +36,5 @@ jobs:
               git config --global user.name "kamatama41"
               git checkout master
               git reset --hard origin/master
-              ./gradlew release -Prelease.useAutomaticVersion=true
+              ./gradlew release -Prelease.useAutomaticVersion=true --scan
             fi
